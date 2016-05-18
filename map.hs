@@ -1,6 +1,6 @@
 import System.IO
 import Data.Char
-initialBoardStr = ".b.b.b.b\nb.b.b.b.\n.b.b.b.b\n........\n........\nw.w.w.w.\n.w.w.w.w\nw.w.w.w."
+initialBoardStr = ".b.b.b.b\nb.b.b.b.\n.b.b.b.b\n........\n........\n..w.w.w.\n...w.w.w\nw.w.w.w."
 data Figure = W | B | WL | BL | E deriving Eq
 type Board = [[Figure]]
 
@@ -18,10 +18,10 @@ charRep '.' = E
 --figRep E = '.'
 
 instance Show Figure where
-  show W = "w"
-  show B = "b"
-  show WL = "W"
-  show BL = "B"
+  show W = "\9922"
+  show B = "\9920"
+  show WL = "\9923"
+  show BL = "\9921"
   show E = "."
 
 
@@ -53,6 +53,10 @@ printBoard mapa = do
   putStrLn("  A|B|C|D|E|F|G|H")
 
 avaMoves :: Int -> Int -> Board -> [(Int,Int)]
-avaMoves row col map =
-  [(a,b)| a<-[0..7], b<-[0..7], and [abs(a-row)==1,abs(b-col)==1,((map !! a)!!b)==E]]
+avaMoves row col mapa =
+  [(a,b)| a<-[0..7], b<-[0..7], and [abs(a-row)==1,abs(b-col)==1,((mapa !! a)!!b)==E, or[and[(mapa !! row)!!col==B,a>row],and[(mapa!! row)!! col==W,a<row]]]]
 
+moveFigure :: (Int,Int) -> (Int, Int) -> Board -> Board
+--moveFigure (figR, figC) (desR, desC) mapa =
+--if sprawdzanie czy dozwolony jak nie to mapa pozostaje bez zmian
+--jeśli dozwolony to zmienia mape
